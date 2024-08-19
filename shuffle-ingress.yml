@@ -1,0 +1,31 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    kubernetes.io/tls-acme: "true"
+  generation: 1
+  name: shuffle-v2
+  namespace: shuffle-v2
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - shuffle-v2.socdemo.rhopenlabs.africa
+    secretName: shuffle2-cert
+  rules:
+  - host: shuffle-v2.socdemo.rhopenlabs.africa
+    http:
+      paths:
+      - backend:
+          service:
+            name: frontend
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+status:
+  loadBalancer:
+    ingress:
+    - ip: 157.230.78.246
